@@ -7,11 +7,10 @@ settings:
 importers:
 
   .:
-    dependencies:
+    devDependencies:
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
-    devDependencies:
       vitest:
         specifier: ^2.1.6
         version: 2.1.6
