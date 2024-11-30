@@ -1,19 +1,20 @@
 {
-  "name": "path-typegen",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc",
-    "test": "vitest run",
-    "dev": "vitest"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "type": "module",
-  "devDependencies": {
-    "@types/node": "^22.10.1",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.6"
-  }
+	"name": "path-typegen",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"build": "tsc",
+		"test": "vitest run",
+		"dev": "vitest"
+	},
+	"author": "",
+	"license": "ISC",
+	"description": "",
+	"type": "module",
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/node": "^22.10.1",
+		"typescript": "^5.7.2",
+		"vitest": "^2.1.6"
+	}
 }
