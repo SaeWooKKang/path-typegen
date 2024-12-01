@@ -1,11 +1,11 @@
 type Schema = {
   title: string;
-  type: string;
+  type: 'string';
   enum: string[];
   description: string;
 }
 
-type Options = {
+export type Options = {
   replacer?: (path: string) => string;
   space?: number;
   typeName?: string;
@@ -14,34 +14,30 @@ type Options = {
 
 const DEFAULT_SPACE = 2
 
-export const pathToSchema = (paths: string[], options?: Options): string => {
-  const schema: Schema = {
+export const pathToSchema = (paths: string[], options?: Options): { definition: Schema, toJSON: () => string } => {
+  const definition: Schema = {
     "title": "FileType",
     "type": "string",
-    "enum": [],
+    "enum": [...paths],
     "description": ""
   };
 
-  for (const path of paths) {
-    schema.enum.push(path);
+  if (options?.description) {
+    definition.description = options.description
   }
 
-  const replacer = (key: string, value: string[]) => {
-    if (key === 'description' && options?.description) {
-      console.log('options?.description,', options?.description)
-      return options.description
-    }
-
-    if (key === 'title' && options?.typeName) {
-      return options.typeName
-    }
-
-    if (key === 'enum' && options?.replacer) {
-      return value.map(options.replacer);
-    }
-
-    return value
+  if (options?.typeName) {
+    definition.title = options.typeName
   }
 
-  return JSON.stringify(schema, replacer, options?.space ?? DEFAULT_SPACE);
+  if (options?.replacer) {
+    definition.enum = definition.enum.map(options.replacer);
+  }
+
+  const toJSON = () => JSON.stringify(definition, null, options?.space ?? DEFAULT_SPACE);
+
+  return {
+    definition,
+    toJSON
+  };
 }

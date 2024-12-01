@@ -7,7 +7,7 @@ describe('pathToSchema', () => {
     const DIRECTORY_PATH = './src/__internal__/__tests__/__assets__/bar';
     const files = getAllFiles(DIRECTORY_PATH);
     
-    const jsonSchema = pathToSchema(files);
+    const schema = pathToSchema(files);
 
     const expectedSchema = JSON.stringify({
       "title": "FileType",
@@ -16,7 +16,7 @@ describe('pathToSchema', () => {
       "description": ""
     }, null, 2);
 
-    expect(jsonSchema).toEqual(expectedSchema)
+    expect(schema.toJSON()).toEqual(expectedSchema)
   })
 
   it('should convert paths with a custom replacer', () => {
@@ -24,7 +24,7 @@ describe('pathToSchema', () => {
     const files = getAllFiles(DIRECTORY_PATH);
 
     const getLastPath = (path: string) => path.split('/').pop() ?? '';
-    const jsonSchema = pathToSchema(files, { replacer: getLastPath });
+    const schema = pathToSchema(files, { replacer: getLastPath });
 
     const expectedSchema = JSON.stringify({
       "title": "FileType",
@@ -33,7 +33,7 @@ describe('pathToSchema', () => {
       "description": ""
     }, null, 2);
 
-    expect(jsonSchema).toEqual(expectedSchema)
+    expect(schema.toJSON()).toEqual(expectedSchema)
   })
 
   it('should convert paths with a type name', () => {
@@ -41,7 +41,7 @@ describe('pathToSchema', () => {
     const files = getAllFiles(DIRECTORY_PATH);
 
     const getLastPath = (path: string) => path.split('/').pop() ?? '';
-    const jsonSchema = pathToSchema(files, { typeName: 'Routes', replacer: getLastPath });
+    const schema = pathToSchema(files, { typeName: 'Routes', replacer: getLastPath });
 
     const expectedSchema = JSON.stringify({
       "title": "Routes",
@@ -50,7 +50,7 @@ describe('pathToSchema', () => {
       "description": ""
     }, null, 2);
 
-    expect(jsonSchema).toEqual(expectedSchema)
+    expect(schema.toJSON()).toEqual(expectedSchema)
   })
 
   it('should convert paths with description', () => {
@@ -58,7 +58,7 @@ describe('pathToSchema', () => {
     const files = getAllFiles(DIRECTORY_PATH);
 
     const getLastPath = (path: string) => path.split('/').pop() ?? '';
-    const jsonSchema = pathToSchema(files, { typeName: 'Routes', replacer: getLastPath, description: '@deprecated this is deprecated' });
+    const schema = pathToSchema(files, { typeName: 'Routes', replacer: getLastPath, description: '@deprecated this is deprecated' });
 
     const expectedSchema = JSON.stringify({
       "title": "Routes",
@@ -67,6 +67,6 @@ describe('pathToSchema', () => {
       "description": "@deprecated this is deprecated"
     }, null, 2);
 
-    expect(jsonSchema).toEqual(expectedSchema)
+    expect(schema.toJSON()).toEqual(expectedSchema)
   })
 })
