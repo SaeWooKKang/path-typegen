@@ -12,7 +12,7 @@
     "check-exports": "attw --pack .",
     "lint": "tsc",
     "ci": "pnpm check && pnpm lint && pnpm test && pnpm build && pnpm check-exports",
-    "prepublishOnly": "npm run ci",
+    "prepublishOnly": "pnpm run ci",
     "local-release": "changeset version && changeset publish"
   },
   "author": "SaeWooKKang",
