@@ -12,9 +12,14 @@ export type Options = {
   description?: string;
 }
 
+export type SchemaOutput = { 
+  definition: Schema, 
+  toJSON: () => string 
+}
+
 const DEFAULT_SPACE = 2
 
-export const pathToSchema = (paths: string[], options?: Options): { definition: Schema, toJSON: () => string } => {
+export const pathToSchema = (paths: string[], options?: Options): SchemaOutput => {
   const definition: Schema = {
     "title": "FileType",
     "type": "string",
