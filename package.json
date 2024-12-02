@@ -2,7 +2,7 @@
   "name": "path-typegen",
   "description": "Typegen for path - Powered by JSON Schema",
   "packageManager": "pnpm@9.2.0",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsup",
@@ -16,7 +16,12 @@
     "local-release": "changeset version && changeset publish"
   },
   "author": "SaeWooKKang",
-  "keywords": ["path", "typegen", "json schema", "typescript"],
+  "keywords": [
+    "path",
+    "typegen",
+    "json schema",
+    "typescript"
+  ],
   "license": "MIT",
   "type": "module",
   "homepage": "https://github.com/SaeWooKKang/path-typegen",
@@ -25,7 +30,9 @@
     "type": "git",
     "url": "git+https://github.com/SaeWooKKang/path-typegen.git"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     "./package.json": "./package.json",
     ".": {
