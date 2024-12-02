@@ -1,19 +1,41 @@
 {
 	"name": "path-typegen",
+	"description": "Typegen for path - Powered by JSON Schema",
+	"packageManager": "pnpm@9.2.0",
 	"version": "1.0.0",
-	"main": "index.js",
+	"main": "./dist/index.js",
 	"scripts": {
-		"build": "tsc",
+		"build": "tsup",
 		"test": "vitest run",
-		"dev": "vitest"
+		"dev": "vitest",
+		"check": "pnpm biome check .",
+		"check-exports": "attw --pack .",
+		"lint": "tsc",
+		"ci": "pnpm check && pnpm lint && pnpm test && pnpm build && pnpm check-exports"
 	},
-	"author": "",
-	"license": "ISC",
-	"description": "",
+	"author": "SaeWooKKang",
+	"keywords": ["path", "typegen", "json schema", "typescript"],
+	"license": "MIT",
 	"type": "module",
+	"homepage": "https://github.com/SaeWooKKang/path-typegen",
+	"bugs": "https://github.com/SaeWooKKang/path-typegen/issues",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/SaeWooKKang/path-typegen.git"
+	},
+	"files": ["dist"],
+	"exports": {
+		"./package.json": "./package.json",
+		".": {
+			"import": "./dist/index.js",
+			"default": "./dist/index.cjs"
+		}
+	},
 	"devDependencies": {
+		"@arethetypeswrong/cli": "^0.17.0",
 		"@biomejs/biome": "1.9.4",
 		"@types/node": "^22.10.1",
+		"tsup": "^8.3.5",
 		"typescript": "^5.7.2",
 		"vitest": "^2.1.6"
 	},
