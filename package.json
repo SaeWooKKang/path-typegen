@@ -21,7 +21,7 @@
 	"bugs": "https://github.com/SaeWooKKang/path-typegen/issues",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/SaeWooKKang/path-typegen.git"
+		"url": "git+https://github.com/SaeWooKKang/path-typegen.git"
 	},
 	"files": ["dist"],
 	"exports": {
