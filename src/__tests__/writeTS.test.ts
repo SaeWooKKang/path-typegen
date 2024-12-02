@@ -11,6 +11,7 @@ describe('writeTS', async () => {
 	afterEach(() => {
 		fs.rmSync(OUTPUT_DIRECTORY_PATH);
 	});
+
 	it('should write ts file', async () => {
 		const INPUT_DIRECTORY_PATH = './src/__internal__/__tests__/__assets__/bar';
 

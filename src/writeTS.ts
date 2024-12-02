@@ -8,13 +8,10 @@ export const writeTS = async (
 	outputPath: string,
 	options?: Options,
 ) => {
-	const schema = pathToSchema(getAllFiles(inputPath), options);
+	const allFiles = getAllFiles(inputPath);
+	const schema = pathToSchema(allFiles, options);
 
 	const res = await schemaParser(schema);
 
-	if (fs.existsSync(outputPath)) {
-		fs.rmSync(outputPath);
-	}
-
-	fs.writeFileSync(outputPath, res);
+	await fs.promises.writeFile(outputPath, res);
 };
