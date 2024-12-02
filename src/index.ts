@@ -1,2 +1,2 @@
-export { writeSchema } from './writeSchema'
-export { writeTS } from './writeTS'
+export { writeSchema } from './writeSchema.js'
+export { writeTS } from './writeTS.js'
