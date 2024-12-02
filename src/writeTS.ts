@@ -1,7 +1,7 @@
 import fs from 'node:fs';
-import { getAllFiles } from './__internal__/getAllFiles.js';
-import { type Options, pathToSchema } from './__internal__/pathToSchema.js';
-import { schemaParser } from './__internal__/schemaParser.js';
+import { getAllFiles } from './__internal__/getAllFiles';
+import { type Options, pathToSchema } from './__internal__/pathToSchema';
+import { schemaParser } from './__internal__/schemaParser';
 
 export const writeTS = async (
 	inputPath: string,

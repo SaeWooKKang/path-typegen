@@ -1,5 +1,5 @@
 import { compile } from 'json-schema-to-typescript';
-import type { SchemaOutput } from './pathToSchema.js';
+import type { SchemaOutput } from './pathToSchema';
 
 export const schemaParser = async (schema: SchemaOutput) => {
 	const ts = await compile(schema.definition, 'writeTS', {

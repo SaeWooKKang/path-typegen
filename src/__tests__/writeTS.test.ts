@@ -1,5 +1,5 @@
 import { describe, expect } from 'vitest';
-import { writeTS } from '../writeTS.js';
+import { writeTS } from '../writeTS';
 
 import fs from 'node:fs';
 import { it } from 'vitest';

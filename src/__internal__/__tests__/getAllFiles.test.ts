@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getAllFiles } from '../getAllFiles.js';
+import { getAllFiles } from '../getAllFiles';
 
 describe('getAllFiles', () => {
 	it('one file', () => {

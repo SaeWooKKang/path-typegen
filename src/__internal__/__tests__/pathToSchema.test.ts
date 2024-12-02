@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { getAllFiles } from '../getAllFiles.js';
-import { pathToSchema } from '../pathToSchema.js';
+import { getAllFiles } from '../getAllFiles';
+import { pathToSchema } from '../pathToSchema';
 
 describe('pathToSchema', () => {
 	it('should convert paths to basic json schema', () => {

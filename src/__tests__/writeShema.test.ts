@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import { afterEach, describe, expect, it } from 'vitest';
-import { writeSchema } from '../writeSchema.js';
+import { writeSchema } from '../writeSchema';
 
 describe('writeSchema', () => {
 	const OUTPUT_DIRECTORY_PATH = './src/__tests__/foo.json';

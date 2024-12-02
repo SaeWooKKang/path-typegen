@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { getAllFiles } from '../getAllFiles.js';
-import { pathToSchema } from '../pathToSchema.js';
-import { schemaParser } from '../schemaParser.js';
+import { getAllFiles } from '../getAllFiles';
+import { pathToSchema } from '../pathToSchema';
+import { schemaParser } from '../schemaParser';
 
 describe('schemaParser', () => {
 	it('should convert schema to ts', async () => {
