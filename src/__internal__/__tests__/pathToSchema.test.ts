@@ -1,72 +1,95 @@
-import { describe, expect, it } from "vitest";
-import { getAllFiles } from "../getAllFiles.js";
-import { pathToSchema } from "../pathToSchema.js";
+import { describe, expect, it } from 'vitest';
+import { getAllFiles } from '../getAllFiles.js';
+import { pathToSchema } from '../pathToSchema.js';
 
 describe('pathToSchema', () => {
-  it('should convert paths to basic json schema', () => {
-    const DIRECTORY_PATH = './src/__internal__/__tests__/__assets__/bar';
-    const files = getAllFiles(DIRECTORY_PATH);
-    
-    const schema = pathToSchema(files);
+	it('should convert paths to basic json schema', () => {
+		const DIRECTORY_PATH = './src/__internal__/__tests__/__assets__/bar';
+		const files = getAllFiles(DIRECTORY_PATH);
 
-    const expectedSchema = JSON.stringify({
-      "title": "FileType",
-      "type": "string",
-      "enum": [`${DIRECTORY_PATH}/index.ts`],
-      "description": ""
-    }, null, 2);
+		const schema = pathToSchema(files);
 
-    expect(schema.toJSON()).toEqual(expectedSchema)
-  })
+		const expectedSchema = JSON.stringify(
+			{
+				title: 'FileType',
+				type: 'string',
+				enum: [`${DIRECTORY_PATH}/index.ts`],
+				description: '',
+			},
+			null,
+			2,
+		);
 
-  it('should convert paths with a custom replacer', () => {
-    const DIRECTORY_PATH = './src/__internal__/__tests__/__assets__/bar';
-    const files = getAllFiles(DIRECTORY_PATH);
+		expect(schema.toJSON()).toEqual(expectedSchema);
+	});
 
-    const getLastPath = (path: string) => path.split('/').pop() ?? '';
-    const schema = pathToSchema(files, { replacer: getLastPath });
+	it('should convert paths with a custom replacer', () => {
+		const DIRECTORY_PATH = './src/__internal__/__tests__/__assets__/bar';
+		const files = getAllFiles(DIRECTORY_PATH);
 
-    const expectedSchema = JSON.stringify({
-      "title": "FileType",
-      "type": "string",
-      "enum": ["index.ts"],
-      "description": ""
-    }, null, 2);
+		const getLastPath = (path: string) => path.split('/').pop() ?? '';
+		const schema = pathToSchema(files, { replacer: getLastPath });
 
-    expect(schema.toJSON()).toEqual(expectedSchema)
-  })
+		const expectedSchema = JSON.stringify(
+			{
+				title: 'FileType',
+				type: 'string',
+				enum: ['index.ts'],
+				description: '',
+			},
+			null,
+			2,
+		);
 
-  it('should convert paths with a type name', () => {
-    const DIRECTORY_PATH = './src/__internal__/__tests__/__assets__/bar';
-    const files = getAllFiles(DIRECTORY_PATH);
+		expect(schema.toJSON()).toEqual(expectedSchema);
+	});
 
-    const getLastPath = (path: string) => path.split('/').pop() ?? '';
-    const schema = pathToSchema(files, { typeName: 'Routes', replacer: getLastPath });
+	it('should convert paths with a type name', () => {
+		const DIRECTORY_PATH = './src/__internal__/__tests__/__assets__/bar';
+		const files = getAllFiles(DIRECTORY_PATH);
 
-    const expectedSchema = JSON.stringify({
-      "title": "Routes",
-      "type": "string",
-      "enum": ["index.ts"],
-      "description": ""
-    }, null, 2);
+		const getLastPath = (path: string) => path.split('/').pop() ?? '';
+		const schema = pathToSchema(files, {
+			typeName: 'Routes',
+			replacer: getLastPath,
+		});
 
-    expect(schema.toJSON()).toEqual(expectedSchema)
-  })
+		const expectedSchema = JSON.stringify(
+			{
+				title: 'Routes',
+				type: 'string',
+				enum: ['index.ts'],
+				description: '',
+			},
+			null,
+			2,
+		);
 
-  it('should convert paths with description', () => {
-    const DIRECTORY_PATH = './src/__internal__/__tests__/__assets__/bar';
-    const files = getAllFiles(DIRECTORY_PATH);
+		expect(schema.toJSON()).toEqual(expectedSchema);
+	});
 
-    const getLastPath = (path: string) => path.split('/').pop() ?? '';
-    const schema = pathToSchema(files, { typeName: 'Routes', replacer: getLastPath, description: '@deprecated this is deprecated' });
+	it('should convert paths with description', () => {
+		const DIRECTORY_PATH = './src/__internal__/__tests__/__assets__/bar';
+		const files = getAllFiles(DIRECTORY_PATH);
 
-    const expectedSchema = JSON.stringify({
-      "title": "Routes",
-      "type": "string",
-      "enum": ["index.ts"],
-      "description": "@deprecated this is deprecated"
-    }, null, 2);
+		const getLastPath = (path: string) => path.split('/').pop() ?? '';
+		const schema = pathToSchema(files, {
+			typeName: 'Routes',
+			replacer: getLastPath,
+			description: '@deprecated this is deprecated',
+		});
 
-    expect(schema.toJSON()).toEqual(expectedSchema)
-  })
-})
+		const expectedSchema = JSON.stringify(
+			{
+				title: 'Routes',
+				type: 'string',
+				enum: ['index.ts'],
+				description: '@deprecated this is deprecated',
+			},
+			null,
+			2,
+		);
+
+		expect(schema.toJSON()).toEqual(expectedSchema);
+	});
+});
