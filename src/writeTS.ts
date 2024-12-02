@@ -6,7 +6,7 @@ import { schemaParser } from './__internal__/schemaParser';
 export const writeTS = async (
 	inputPath: string,
 	outputPath: string,
-	options?: Options,
+	options?: Omit<Options, 'space'>,
 ) => {
 	const allFiles = getAllFiles(inputPath);
 	const schema = pathToSchema(allFiles, options);
