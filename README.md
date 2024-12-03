@@ -1,6 +1,12 @@
 # path-typegen
 path-typegen is a library that converts file paths to TypeScript types and JSON Schema
 
+## Installation
+
+``` bash
+$ npm i path-typegen
+```
+
 ## Usage
 
 ### writeTS
