@@ -92,4 +92,39 @@ describe('pathToSchema', () => {
 
     expect(schema.toJSON()).toEqual(expectedSchema);
   });
+
+  it('should convert paths to object schema', () => {
+    const samplePaths = ['pages/about.tsx'];
+
+    const schema = pathToSchema(samplePaths, {
+      output: {
+        type: 'object',
+      },
+    });
+
+    const expectedSchema = JSON.stringify(
+      {
+        title: 'FileType',
+        type: 'object',
+        description: '',
+        oneOf: [
+          {
+            type: 'object',
+            properties: {
+              path: {
+                type: 'string',
+                const: 'pages/about.tsx',
+              },
+            },
+            required: ['path'],
+            additionalProperties: false,
+          },
+        ],
+      },
+      null,
+      2,
+    );
+
+    expect(schema.toJSON()).toEqual(expectedSchema);
+  });
 });
