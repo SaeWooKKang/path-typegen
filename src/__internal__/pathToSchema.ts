@@ -13,12 +13,12 @@ type ObjectSchema = {
     type: 'object';
     properties: {
       path: {
-        type: string;
+        type: 'string';
         const: string;
       };
       params?: {
         type: 'object';
-        properties: Record<string, { type: string }>;
+        properties: Record<string, { type: 'string' }>;
         required: string[];
         additionalProperties: boolean;
       };
@@ -92,11 +92,11 @@ const createPathSchema = (
 
         const properties = params.reduce(
           (acc, param) => {
-            acc[param] = { type: 'string' };
+            acc[param] = { type: 'string' as const };
 
             return acc;
           },
-          {} as Record<string, { type: string }>,
+          {} as Record<string, { type: 'string' }>,
         );
 
         one.properties.params = {
