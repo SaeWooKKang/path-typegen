@@ -58,7 +58,7 @@ export type PathType = {
 
 ### writeSchema
 - Generates path structure to [JSON Schema](https://json-schema.org/)
-- You can use the same Options type that was used in watchTS.
+- You can use the same Options type that was used in writeTS.
 
 ``` ts
 // 📦 src/assets/
