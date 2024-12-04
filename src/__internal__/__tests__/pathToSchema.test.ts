@@ -127,4 +127,54 @@ describe('pathToSchema', () => {
 
     expect(schema.toJSON()).toEqual(expectedSchema);
   });
+
+  it('should convert paths to object schema with params', () => {
+    const samplePaths = ['pages/products/[category]/[id].tsx'];
+    const pattern = /(?<=\[)[^\]]*(?=\])/g;
+
+    const schema = pathToSchema(samplePaths, {
+      output: {
+        type: 'object',
+        pattern: pattern,
+      },
+    });
+
+    const expectedSchema = JSON.stringify(
+      {
+        title: 'FileType',
+        type: 'object',
+        description: '',
+        oneOf: [
+          {
+            type: 'object',
+            properties: {
+              path: {
+                type: 'string',
+                const: 'pages/products/[category]/[id].tsx',
+              },
+              params: {
+                type: 'object',
+                properties: {
+                  category: {
+                    type: 'string',
+                  },
+                  id: {
+                    type: 'string',
+                  },
+                },
+                required: ['category', 'id'],
+                additionalProperties: false,
+              },
+            },
+            required: ['path', 'params'],
+            additionalProperties: false,
+          },
+        ],
+      },
+      null,
+      2,
+    );
+
+    expect(schema.toJSON()).toEqual(expectedSchema);
+  });
 });

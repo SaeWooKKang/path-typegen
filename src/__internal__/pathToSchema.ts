@@ -16,6 +16,12 @@ type ObjectSchema = {
         type: string;
         const: string;
       };
+      params?: {
+        type: 'object';
+        properties: Record<string, { type: string }>;
+        required: string[];
+        additionalProperties: boolean;
+      };
     };
     required: string[];
     additionalProperties: boolean;
@@ -24,17 +30,23 @@ type ObjectSchema = {
 
 type Schema = StringSchema | ObjectSchema;
 
+type StringOutput = {
+  type: 'string';
+};
+
+type ObjectOutput = {
+  type: 'object';
+  pattern?: RegExp;
+};
+
+type Output = StringOutput | ObjectOutput;
+
 export type Options = {
   replacer?: (path: string) => string;
   space?: number;
   typeName?: string;
   description?: string;
-  output?: {
-    /**
-     * Default: 'string'
-     */
-    type: 'string' | 'object';
-  };
+  output?: Output;
 };
 
 export type SchemaOutput = {
@@ -44,22 +56,26 @@ export type SchemaOutput = {
 
 const DEFAULT_SPACE = 2;
 
+const isObjectOutput = (output?: Output): output is ObjectOutput => {
+  return output?.type === 'object';
+};
+
 const createPathSchema = (
   paths: string[],
   options?: Omit<Options, 'space'>,
 ): Schema => {
-  if (options?.output?.type === 'object') {
+  if (isObjectOutput(options?.output)) {
     const definition: ObjectSchema = {
-      title: 'FileType',
+      title: options.typeName ?? 'FileType',
       type: 'object',
-      description: '',
+      description: options?.description ?? '',
       oneOf: [],
     };
 
     const oneOf = paths.map((path) => {
       const parsedPath = options?.replacer ? options.replacer(path) : path;
 
-      return {
+      const one: ObjectSchema['oneOf'][number] = {
         type: 'object' as const,
         properties: {
           path: {
@@ -70,17 +86,32 @@ const createPathSchema = (
         required: ['path'],
         additionalProperties: false,
       };
+
+      if (isObjectOutput(options?.output) && options.output?.pattern) {
+        const params = [...(path.match(options.output.pattern) || [])];
+
+        const properties = params.reduce(
+          (acc, param) => {
+            acc[param] = { type: 'string' };
+
+            return acc;
+          },
+          {} as Record<string, { type: string }>,
+        );
+
+        one.properties.params = {
+          type: 'object',
+          properties,
+          required: params,
+          additionalProperties: false,
+        };
+        one.required.push('params');
+      }
+
+      return one;
     });
 
     definition.oneOf = oneOf;
-
-    if (options?.description) {
-      definition.description = options.description;
-    }
-
-    if (options?.typeName) {
-      definition.title = options.typeName;
-    }
 
     return definition;
   }
