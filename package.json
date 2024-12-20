@@ -8,6 +8,7 @@
     "build": "tsup",
     "test": "vitest run",
     "dev": "vitest",
+    "cli:dev": "tsup --watch",
     "check": "pnpm biome check .",
     "check-exports": "attw --pack .",
     "lint": "tsc",
@@ -39,6 +40,10 @@
       "import": "./dist/index.js",
       "default": "./dist/index.cjs"
     }
+  },
+  "bin": {
+    "path-typegen": "./dist/cli.js",
+    "path-typegen-node": "./dist/cli.cjs"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.0",
