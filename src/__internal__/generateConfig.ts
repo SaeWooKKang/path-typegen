@@ -3,14 +3,14 @@ import fs from 'node:fs/promises';
 export const CONFIG_FILENAME = 'path-typegen.config.js';
 
 const DEFAULT_CONFIG = {
-  input: './src',
-  output: './types.ts',
+  inputPath: './src',
+  outputPath: './types.ts',
 };
 
 export const generateConfig = async (
   path: string,
-  success = () => null,
-  fail = (error: unknown) => null,
+  success: () => void = () => undefined,
+  fail: (error: unknown) => void = () => undefined,
 ) => {
   try {
     const configContent = `/** @type {import('path-typegen').CLIOptions} */
