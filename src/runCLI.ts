@@ -4,6 +4,7 @@ import { writeSchema, writeTS } from './index';
 import { CONFIG_FILENAME, generateConfig } from './__internal__/generateConfig';
 import nodePath from 'node:path';
 import type { Options } from './__internal__/pathToSchema';
+import fs from 'node:fs';
 
 export type CLIOptions = {
   inputPath: string;
@@ -13,7 +14,9 @@ export type CLIOptions = {
   options: Options;
 };
 
-export const runCLI = () => {
+const configPath = nodePath.join(process.cwd(), CONFIG_FILENAME);
+
+export const runCLI = async () => {
   const program = new Command();
 
   program
@@ -27,8 +30,6 @@ export const runCLI = () => {
   const cliOptions = program.opts();
 
   if (cliOptions.init) {
-    const configPath = nodePath.join(process.cwd(), CONFIG_FILENAME);
-
     generateConfig(
       configPath,
       () =>
@@ -40,17 +41,28 @@ export const runCLI = () => {
     return;
   }
 
-  const inputPath = cliOptions.input;
-  const outputPath = cliOptions.output;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation> TODO: fix
+  let config: any;
 
-  const isSchema = cliOptions.schema;
+  if (fs.existsSync(configPath)) {
+    config = await import(configPath);
+  }
+
+  const inputPath = cliOptions.input ?? config?.default?.inputPath;
+  const outputPath = cliOptions.output ?? config?.default?.outputPath;
+
+  const isSchema = cliOptions.schema || config?.default?.isSchema;
+
+  if (!inputPath || !outputPath) {
+    throw new Error(chalk.red('❌ Please provide both input and output paths'));
+  }
 
   if (isSchema) {
-    writeSchema(inputPath, outputPath).then(() => {
+    writeSchema(inputPath, outputPath, config?.default?.options).then(() => {
       console.log(chalk.blue('✨ Generated JSON Schema: '), outputPath);
     });
   } else {
-    writeTS(inputPath, outputPath).then(() => {
+    writeTS(inputPath, outputPath, config?.default?.options).then(() => {
       console.log(chalk.blue('✨ Generated TypeScript types: '), outputPath);
     });
   }

@@ -24,6 +24,8 @@ vi.mock('../__internal__/generateConfig', async (importOriginal) => {
 });
 
 describe('CLI', () => {
+  afterEach(() => {});
+
   it('should execute CLI command with input and output paths', async () => {
     process.argv = [
       'node',
@@ -36,7 +38,11 @@ describe('CLI', () => {
 
     await runCLI();
 
-    expect(writeTS).toHaveBeenCalledWith('./src/__internal__', './src/foo.ts');
+    expect(writeTS).toHaveBeenCalledWith(
+      './src/__internal__',
+      './src/foo.ts',
+      undefined,
+    );
   });
 
   it('should generate TypeScript types by default', async () => {
@@ -51,7 +57,11 @@ describe('CLI', () => {
 
     await runCLI();
 
-    expect(writeTS).toHaveBeenCalledWith('./src/__internal__', './src/foo.ts');
+    expect(writeTS).toHaveBeenCalledWith(
+      './src/__internal__',
+      './src/foo.ts',
+      undefined,
+    );
   });
 
   it('should generate JSON Schema when --schema flag is provided', async () => {
@@ -70,6 +80,7 @@ describe('CLI', () => {
     expect(writeSchema).toHaveBeenCalledWith(
       './src/__internal__',
       'schema.json',
+      undefined,
     );
   });
 
@@ -85,5 +96,35 @@ describe('CLI', () => {
       expect.any(Function),
       expect.any(Function),
     );
+  });
+
+  it('should use CLI options over config options', async () => {
+    process.argv = [
+      'node',
+      'cli.ts',
+      '-i',
+      './src/__internal__',
+      '-o',
+      './src/path.json',
+      '-s',
+    ];
+
+    const configPath = path.join(process.cwd(), CONFIG_FILENAME);
+
+    await generateConfig(configPath);
+
+    await runCLI();
+
+    expect(writeSchema).toHaveBeenCalledWith(
+      './src/__internal__',
+      './src/path.json',
+      undefined,
+    );
+  });
+
+  it('should throw an error if input or output path does not exist', async () => {
+    process.argv = ['node', 'cli.ts'];
+
+    await expect(() => runCLI()).rejects.toThrow();
   });
 });

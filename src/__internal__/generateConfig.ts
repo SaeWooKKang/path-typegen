@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 
-export const CONFIG_FILENAME = 'path-typegen.config.js';
+export const CONFIG_FILENAME = 'path-typegen.config.cjs';
 
 const DEFAULT_CONFIG = {
   inputPath: './src',
