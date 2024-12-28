@@ -53,6 +53,7 @@ export const runCLI = async () => {
 
       const inputPath = options.input ?? config?.default?.inputPath;
       const outputPath = options.output ?? config?.default?.outputPath;
+      const isSchema = options.schema ?? config?.default.isSchema;
 
       if (!inputPath || !outputPath) {
         throw new Error(
@@ -60,7 +61,7 @@ export const runCLI = async () => {
         );
       }
 
-      if (options.schema) {
+      if (isSchema) {
         await writeSchema(inputPath, outputPath, config?.default?.options);
         console.log(chalk.blue('✨ Generated JSON Schema: '), outputPath);
       } else {
