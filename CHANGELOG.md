@@ -1,5 +1,11 @@
 # path-typegen
 
+## 1.2.0
+
+### Minor Changes
+
+- c5ae44c: Implement CLI Interface
+
 ## 1.1.0
 
 ### Minor Changes
