@@ -1,13 +1,13 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { runCLI } from '../runCLI';
 
-import { writeTS, writeSchema } from '../index';
 import path from 'node:path';
 import {
   CONFIG_FILENAME,
   generateConfig,
 } from '../__internal__/generateConfig';
+import { writeSchema, writeTS } from '../index';
 
 vi.mock('../index', () => ({
   writeSchema: vi.fn().mockResolvedValue(undefined),

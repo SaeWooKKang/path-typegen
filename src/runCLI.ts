@@ -1,11 +1,11 @@
+import fs from 'node:fs';
+import nodePath from 'node:path';
 import chalk from 'chalk';
 import { Command } from 'commander';
-import { writeSchema, writeTS } from './index';
-import { CONFIG_FILENAME, generateConfig } from './__internal__/generateConfig';
-import nodePath from 'node:path';
-import type { Options } from './__internal__/pathToSchema';
-import fs from 'node:fs';
 import { version } from '../package.json';
+import { CONFIG_FILENAME, generateConfig } from './__internal__/generateConfig';
+import type { Options } from './__internal__/pathToSchema';
+import { writeSchema, writeTS } from './index';
 
 export type CLIOptions = {
   inputPath: string;

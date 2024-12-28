@@ -1,7 +1,7 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
 import fs from 'node:fs';
-import { CONFIG_FILENAME, generateConfig } from '../generateConfig';
 import * as nodePath from 'node:path';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { CONFIG_FILENAME, generateConfig } from '../generateConfig';
 
 describe('generateConfig', () => {
   afterEach(() => {
