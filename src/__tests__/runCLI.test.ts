@@ -24,12 +24,11 @@ vi.mock('../__internal__/generateConfig', async (importOriginal) => {
 });
 
 describe('CLI', () => {
-  afterEach(() => {});
-
   it('should execute CLI command with input and output paths', async () => {
     process.argv = [
       'node',
       './src/cli.ts',
+      'generate',
       '-i',
       './src/__internal__',
       '-o',
@@ -49,6 +48,7 @@ describe('CLI', () => {
     process.argv = [
       'tsx',
       './src/cli.ts',
+      'generate',
       '-i',
       './src/__internal__',
       '-o',
@@ -68,6 +68,7 @@ describe('CLI', () => {
     process.argv = [
       'node',
       'cli.ts',
+      'generate',
       '-i',
       './src/__internal__',
       '-o',
@@ -85,7 +86,7 @@ describe('CLI', () => {
   });
 
   it('should generate a config file when init flag is provided', async () => {
-    process.argv = ['node', 'cli.ts', '--init'];
+    process.argv = ['node', 'cli.ts', 'init'];
 
     await runCLI();
 
@@ -102,6 +103,7 @@ describe('CLI', () => {
     process.argv = [
       'node',
       'cli.ts',
+      'generate',
       '-i',
       './src/__internal__',
       '-o',

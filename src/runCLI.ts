@@ -23,50 +23,51 @@ export const runCLI = async () => {
   program.version(version);
 
   program
-    .option('--init')
-    .option('-i --input <inputPath>')
-    .option('-o, --output <outputPath>')
-    .option('-s, --schema', 'Generate JSON Schema', false)
-    .option('-ts, --typescript', 'Generate TypeScript types', true)
-    .parse();
-
-  const cliOptions = program.opts();
-
-  if (cliOptions.init) {
-    generateConfig(
-      configPath,
-      () =>
-        console.log(chalk.green('✨ Configuration file created: '), configPath),
-      (e) =>
-        console.log(chalk.red('❌ Failed to create configuration file: '), e),
-    );
-
-    return;
-  }
-
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation> TODO: fix
-  let config: any;
-
-  if (fs.existsSync(configPath)) {
-    config = await import(configPath);
-  }
-
-  const inputPath = cliOptions.input ?? config?.default?.inputPath;
-  const outputPath = cliOptions.output ?? config?.default?.outputPath;
-
-  const isSchema = cliOptions.schema || config?.default?.isSchema;
-
-  if (!inputPath || !outputPath) {
-    throw new Error(chalk.red('❌ Please provide both input and output paths'));
-  }
-
-  if (isSchema) {
-    writeSchema(inputPath, outputPath, config?.default?.options).then(() => {
-      console.log(chalk.blue('✨ Generated JSON Schema: '), outputPath);
+    .command('init')
+    .description('Create a new configuration file')
+    .action(() => {
+      generateConfig(
+        configPath,
+        () =>
+          console.log(
+            chalk.green('✨ Configuration file created: '),
+            configPath,
+          ),
+        (e) =>
+          console.log(chalk.red('❌ Failed to create configuration file: '), e),
+      );
     });
-  } else {
-    writeTS(inputPath, outputPath, config?.default?.options).then(() => {
-      console.log(chalk.blue('✨ Generated TypeScript types: '), outputPath);
+
+  program
+    .command('generate')
+    .description('Generate TypeScript types or JSON Schema')
+    .option('-i, --input <inputPath>', 'Input file path')
+    .option('-o, --output <outputPath>', 'Output file path')
+    .option('-s, --schema', 'Generate JSON Schema instead of TypeScript', false)
+    .action(async (options) => {
+      // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation> FIXME:
+      let config;
+      if (fs.existsSync(configPath)) {
+        config = await import(configPath);
+      }
+
+      const inputPath = options.input ?? config?.default?.inputPath;
+      const outputPath = options.output ?? config?.default?.outputPath;
+
+      if (!inputPath || !outputPath) {
+        throw new Error(
+          chalk.red('❌ Please provide both input and output paths'),
+        );
+      }
+
+      if (options.schema) {
+        await writeSchema(inputPath, outputPath, config?.default?.options);
+        console.log(chalk.blue('✨ Generated JSON Schema: '), outputPath);
+      } else {
+        await writeTS(inputPath, outputPath, config?.default?.options);
+        console.log(chalk.blue('✨ Generated TypeScript types: '), outputPath);
+      }
     });
-  }
+
+  program.parse();
 };
