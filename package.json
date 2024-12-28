@@ -8,6 +8,7 @@
     "build": "tsup",
     "test": "vitest run",
     "dev": "vitest",
+    "cli:dev": "tsup --watch",
     "check": "pnpm biome check .",
     "check-exports": "attw --pack .",
     "lint": "tsc",
@@ -40,6 +41,10 @@
       "default": "./dist/index.cjs"
     }
   },
+  "bin": {
+    "path-typegen": "./dist/cli.js",
+    "path-typegen-node": "./dist/cli.cjs"
+  },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.0",
     "@biomejs/biome": "1.9.4",
@@ -50,6 +55,8 @@
     "vitest": "^2.1.6"
   },
   "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
     "json-schema-to-typescript": "^15.0.3"
   }
 }
