@@ -5,6 +5,7 @@ import { CONFIG_FILENAME, generateConfig } from './__internal__/generateConfig';
 import nodePath from 'node:path';
 import type { Options } from './__internal__/pathToSchema';
 import fs from 'node:fs';
+import { version } from '../package.json';
 
 export type CLIOptions = {
   inputPath: string;
@@ -18,6 +19,8 @@ const configPath = nodePath.join(process.cwd(), CONFIG_FILENAME);
 
 export const runCLI = async () => {
   const program = new Command();
+
+  program.version(version);
 
   program
     .option('--init')
