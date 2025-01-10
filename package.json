@@ -6,7 +6,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsup",
-    "test": "vitest run",
+    "test": "vitest run --coverage",
     "dev": "vitest",
     "cli:dev": "tsup --watch",
     "check": "pnpm biome check .",
