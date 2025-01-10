@@ -1,6 +1,8 @@
 # path-typegen
 path-typegen is a library that converts file paths to TypeScript types and JSON Schema
 
+[![codecov](https://codecov.io/github/SaeWooKKang/path-typegen/graph/badge.svg?token=2U4N55K5EB)](https://codecov.io/github/SaeWooKKang/path-typegen)
+
 ## Installation
 
 ``` bash
