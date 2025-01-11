@@ -14,7 +14,10 @@
     "lint": "tsc",
     "ci": "pnpm check && pnpm lint && pnpm test && pnpm build && pnpm check-exports",
     "prepublishOnly": "pnpm run ci",
-    "local-release": "changeset version && changeset publish"
+    "changeset:version":"changeset version",
+    "changeset:publish": "pnpm changeset publish",
+    "local-release": "pnpm changeset:version && pnpm changeset:publish",
+    "release": "pnpm changeset:publish"
   },
   "author": "SaeWooKKang",
   "keywords": [
