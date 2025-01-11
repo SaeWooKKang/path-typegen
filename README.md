@@ -1,6 +1,7 @@
 # path-typegen
 
 [![CI Status](https://github.com/SaeWooKKang/path-typegen/actions/workflows/ci.yml/badge.svg)](https://github.com/SaeWooKKang/path-typegen/actions/workflows/ci.yml)
+[![npm version](https://badge.fury.io/js/path-typegen.svg)](https://www.npmjs.com/package/path-typegen)
 [![codecov](https://codecov.io/github/SaeWooKKang/path-typegen/graph/badge.svg?token=2U4N55K5EB)](https://codecov.io/github/SaeWooKKang/path-typegen)
 
 path-typegen is a library that converts file paths to TypeScript types and JSON Schema
