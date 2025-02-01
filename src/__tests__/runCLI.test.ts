@@ -92,11 +92,7 @@ describe('CLI', () => {
 
     const configPath = path.join(process.cwd(), CONFIG_FILENAME);
 
-    expect(generateConfig).toHaveBeenCalledWith(
-      configPath,
-      expect.any(Function),
-      expect.any(Function),
-    );
+    expect(generateConfig).toHaveBeenCalledWith(configPath);
   });
 
   it('should use CLI options over config options', async () => {

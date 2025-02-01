@@ -26,16 +26,13 @@ export const runCLI = async () => {
     .command('init')
     .description('Create a new configuration file')
     .action(() => {
-      generateConfig(
-        configPath,
-        () =>
-          console.log(
-            chalk.green('✨ Configuration file created: '),
-            configPath,
-          ),
-        (e) =>
-          console.log(chalk.red('❌ Failed to create configuration file: '), e),
-      );
+      try {
+        generateConfig(configPath);
+
+        console.log(chalk.green('✨ Configuration file created: '), configPath);
+      } catch (e) {
+        console.log(chalk.red('❌ Failed to create configuration file: '), e);
+      }
     });
 
   program
