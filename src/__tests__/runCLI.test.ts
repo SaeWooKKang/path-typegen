@@ -3,12 +3,12 @@ import { describe, expect, it, vi } from 'vitest';
 import { runCLI } from '../runCLI';
 
 import path from 'node:path';
+import chalk from 'chalk';
 import {
   CONFIG_FILENAME,
   generateConfig,
 } from '../__internal__/generateConfig';
 import { writeSchema, writeTS } from '../index';
-import chalk from 'chalk';
 
 vi.mock('../index', () => ({
   writeSchema: vi.fn().mockResolvedValue(undefined),
