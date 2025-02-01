@@ -25,9 +25,9 @@ export const runCLI = async () => {
   program
     .command('init')
     .description('Create a new configuration file')
-    .action(() => {
+    .action(async () => {
       try {
-        generateConfig(configPath);
+        await generateConfig(configPath);
 
         console.log(chalk.green('✨ Configuration file created: '), configPath);
       } catch (e) {

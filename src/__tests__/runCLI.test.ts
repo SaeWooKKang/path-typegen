@@ -8,6 +8,7 @@ import {
   generateConfig,
 } from '../__internal__/generateConfig';
 import { writeSchema, writeTS } from '../index';
+import chalk from 'chalk';
 
 vi.mock('../index', () => ({
   writeSchema: vi.fn().mockResolvedValue(undefined),
@@ -93,6 +94,21 @@ describe('CLI', () => {
     const configPath = path.join(process.cwd(), CONFIG_FILENAME);
 
     expect(generateConfig).toHaveBeenCalledWith(configPath);
+  });
+
+  it('should handle error when creating config file', async () => {
+    process.argv = ['node', 'cli.ts', 'init'];
+
+    const consoleLogSpy = vi.spyOn(console, 'log');
+
+    vi.mocked(generateConfig).mockRejectedValueOnce(new Error('Test error'));
+
+    await runCLI();
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      chalk.red('❌ Failed to create configuration file: '),
+      expect.any(Error),
+    );
   });
 
   it('should use CLI options over config options', async () => {
