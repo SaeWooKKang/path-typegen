@@ -19,23 +19,4 @@ describe('generateConfig', () => {
 
     expect(fs.existsSync(configPath)).toBe(true);
   });
-
-  it('should call success callback', async () => {
-    const success = vi.fn();
-
-    await generateConfig(
-      nodePath.join(process.cwd(), CONFIG_FILENAME),
-      success,
-    );
-
-    expect(success).toHaveBeenCalled();
-  });
-
-  it('should call fail callback', async () => {
-    const fail = vi.fn();
-
-    await generateConfig('', undefined, fail);
-
-    expect(fail).toHaveBeenCalled();
-  });
 });

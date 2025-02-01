@@ -7,19 +7,8 @@ const DEFAULT_CONFIG = {
   outputPath: './types.ts',
 };
 
-export const generateConfig = async (
-  path: string,
-  success: () => void = () => undefined,
-  fail: (error: unknown) => void = () => undefined,
-) => {
-  try {
-    const configContent = `/** @type {import('path-typegen').CLIOptions} */
+const CONFIG_CONTENTS = `/** @type {import('path-typegen').CLIOptions} */
 module.exports = ${JSON.stringify(DEFAULT_CONFIG, null, 2)}`;
 
-    await fs.writeFile(path, configContent, 'utf-8');
-
-    success();
-  } catch (error) {
-    fail(error);
-  }
-};
+export const generateConfig = async (path: string) =>
+  await fs.writeFile(path, CONFIG_CONTENTS, 'utf-8');
