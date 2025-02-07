@@ -8,10 +8,9 @@ import {
   CONFIG_FILENAME,
   generateConfig,
 } from '../__internal__/generateConfig';
-import { writeSchema, writeTS } from '../index';
+import { writeTS } from '../index';
 
 vi.mock('../index', () => ({
-  writeSchema: vi.fn().mockResolvedValue(undefined),
   writeTS: vi.fn().mockResolvedValue(undefined),
 }));
 
@@ -65,27 +64,6 @@ describe('CLI', () => {
     );
   });
 
-  it('should generate JSON Schema when --schema flag is provided', async () => {
-    process.argv = [
-      'node',
-      'cli.ts',
-      'generate',
-      '-i',
-      './src/__internal__',
-      '-o',
-      'schema.json',
-      '--schema',
-    ];
-
-    await runCLI();
-
-    expect(writeSchema).toHaveBeenCalledWith(
-      './src/__internal__',
-      'schema.json',
-      undefined,
-    );
-  });
-
   it('should generate a config file when init flag is provided', async () => {
     process.argv = ['node', 'cli.ts', 'init'];
 
@@ -120,7 +98,6 @@ describe('CLI', () => {
       './src/__internal__',
       '-o',
       './src/path.json',
-      '-s',
     ];
 
     const configPath = path.join(process.cwd(), CONFIG_FILENAME);
@@ -129,7 +106,7 @@ describe('CLI', () => {
 
     await runCLI();
 
-    expect(writeSchema).toHaveBeenCalledWith(
+    expect(writeTS).toHaveBeenCalledWith(
       './src/__internal__',
       './src/path.json',
       undefined,
