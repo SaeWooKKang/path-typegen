@@ -5,13 +5,11 @@ import { Command } from 'commander';
 import { version } from '../package.json';
 import { CONFIG_FILENAME, generateConfig } from './__internal__/generateConfig';
 import type { Options } from './__internal__/pathToSchema';
-import { writeSchema, writeTS } from './index';
+import { writeTS } from './index';
 
 export type CLIOptions = {
   inputPath: string;
   outputPath: string;
-  /** Default: false */
-  isSchema?: boolean;
   options: Options;
 };
 
@@ -37,10 +35,9 @@ export const runCLI = async () => {
 
   program
     .command('generate')
-    .description('Generate TypeScript types or JSON Schema')
+    .description('Generate TypeScript types')
     .option('-i, --input <inputPath>', 'Input file path')
     .option('-o, --output <outputPath>', 'Output file path')
-    .option('-s, --schema', 'Generate JSON Schema instead of TypeScript', false)
     .action(async (options) => {
       // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation> FIXME:
       let config;
@@ -50,7 +47,6 @@ export const runCLI = async () => {
 
       const inputPath = options.input ?? config?.default?.inputPath;
       const outputPath = options.output ?? config?.default?.outputPath;
-      const isSchema = options.schema ?? config?.default.isSchema;
 
       if (!inputPath || !outputPath) {
         throw new Error(
@@ -58,13 +54,8 @@ export const runCLI = async () => {
         );
       }
 
-      if (isSchema) {
-        await writeSchema(inputPath, outputPath, config?.default?.options);
-        console.log(chalk.blue('✨ Generated JSON Schema: '), outputPath);
-      } else {
-        await writeTS(inputPath, outputPath, config?.default?.options);
-        console.log(chalk.blue('✨ Generated TypeScript types: '), outputPath);
-      }
+      await writeTS(inputPath, outputPath, config?.default?.options);
+      console.log(chalk.blue('✨ Generated TypeScript types: '), outputPath);
     });
 
   program.parse();
