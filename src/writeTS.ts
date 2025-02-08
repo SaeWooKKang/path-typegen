@@ -9,7 +9,7 @@ export const writeTS = async (
   options?: Omit<Options, 'space'>,
 ) => {
   const allFiles = getAllFiles(inputPath);
-  const schema = pathToSchema(allFiles, options);
+  const schema = pathToSchema([...allFiles], options);
 
   const res = await schemaParser(schema);
 
