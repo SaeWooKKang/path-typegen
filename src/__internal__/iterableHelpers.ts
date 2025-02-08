@@ -36,3 +36,8 @@ export function join<A>(separator: string, iterable: Iterable<A>): string {
 
   return res;
 }
+
+export const isIterable = (value: unknown): value is Iterable<unknown> => {
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  return typeof (value as any)[Symbol.iterator] === 'function';
+};
