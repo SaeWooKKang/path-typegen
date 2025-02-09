@@ -1,3 +1,4 @@
+import { getAllFiles } from './getAllFiles';
 import { filter, join, map } from './iterableHelpers';
 import fs from 'node:fs';
 
@@ -32,11 +33,11 @@ export class Ph implements PathGen {
   ) {}
 
   setInputPath(path: string): Ph {
-    return new Ph(path, this.outputPath, this.paths);
+    return new Ph(path, this.outputPath, getAllFiles(path));
   }
 
   setOutputPath(path: string): Ph {
-    return new Ph(this.inputPath, path, this.paths);
+    return new Ph(this.inputPath, path, getAllFiles(path));
   }
 
   map(callbackFn: (path: string) => string): Ph {
