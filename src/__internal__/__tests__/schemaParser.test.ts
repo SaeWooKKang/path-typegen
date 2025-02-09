@@ -8,7 +8,7 @@ describe('schemaParser', () => {
   it('should convert schema to ts', async () => {
     const INPUT_DIRECTORY_PATH = './src/__internal__/__tests__/__assets__/bar';
 
-    const schema = pathToSchema(getAllFiles(INPUT_DIRECTORY_PATH));
+    const schema = pathToSchema([...getAllFiles(INPUT_DIRECTORY_PATH)]);
     const ts = await schemaParser(schema);
 
     const expectedFile = `/* eslint-disable */
