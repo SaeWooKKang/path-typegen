@@ -7,60 +7,66 @@ export interface Config {
   description: string;
 }
 
-export interface PathGen {
+export interface PathGen<A> {
   inputPath: string;
   outputPath: string;
   config: Config;
-  paths: Iterable<string>;
-  setInputPath(path: string): PathGen;
-  setOutputPath(path: string): PathGen;
+  paths: Iterable<A>;
+  setInputPath(path: string): PathGen<string>;
+  setOutputPath(path: string): PathGen<A>;
   setConfig(config: Config | ((prevConfig: Config) => Config)): void;
-  map(callbackFn: (path: string) => string): PathGen;
-  filter(callbackFn: (path: string) => boolean): PathGen;
+  map<B>(callbackFn: (path: A) => B): PathGen<B>;
+  filter(callbackFn: (path: A) => boolean): PathGen<A>;
   write(formatter?: (code: string) => string): Promise<void>;
 }
 
-export class Ph implements PathGen {
-  private _config: Config = {
-    typeName: '',
-    description: '',
-  };
-
+export class Ph<A> implements PathGen<A> {
   constructor(
     public inputPath: string,
     public outputPath: string,
-    public paths: Iterable<string>,
+    public paths: Iterable<A>,
+    public config: Config = {
+      description: '',
+      typeName: '',
+    },
   ) {}
 
-  setInputPath(path: string): Ph {
-    return new Ph(path, this.outputPath, getAllFiles(path));
+  setInputPath(path: string): Ph<string> {
+    return new Ph(path, this.outputPath, getAllFiles(path), this.config);
   }
 
-  setOutputPath(path: string): Ph {
-    return new Ph(this.inputPath, path, getAllFiles(path));
+  setOutputPath(path: string): Ph<A> {
+    return new Ph(this.inputPath, path, this.paths, this.config);
   }
 
-  map(callbackFn: (path: string) => string): Ph {
-    return new Ph(this.inputPath, this.outputPath, map(callbackFn, this.paths));
+  map<B>(callbackFn: (path: A) => B): Ph<B> {
+    return new Ph<B>(
+      this.inputPath,
+      this.outputPath,
+      map(callbackFn, this.paths),
+      this.config,
+    );
   }
 
-  filter(callbackFn: (path: string) => boolean): Ph {
+  filter(callbackFn: (path: A) => boolean): Ph<A> {
     return new Ph(
       this.inputPath,
       this.outputPath,
       filter(callbackFn, this.paths),
+      this.config,
     );
   }
 
-  get config() {
-    return this._config;
-  }
-
-  public setConfig(config: Config | ((prevConfig: Config) => Config)): Ph {
+  public setConfig(config: Config | ((prevConfig: Config) => Config)): Ph<A> {
     if (typeof config === 'function') {
-      this._config = config(this._config);
-    } else {
-      this._config = config;
+      return new Ph(
+        this.inputPath,
+        this.outputPath,
+        this.paths,
+        config(this.config),
+      );
+    }
+    return new Ph(this.inputPath, this.outputPath, this.paths, config);
     }
 
     return this;

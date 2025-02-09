@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { Ph, type Config } from '../Ph';
+import { formatJSDoc, Ph, type Config } from '../Ph';
 import fs from 'node:fs';
 import { isIterable } from '../iterableHelpers';
 
@@ -44,22 +44,28 @@ describe('Ph', () => {
 
   describe('setConfig', () => {
     it('should update config with object', () => {
-      const ph = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable);
       const newConfig = { typeName: 'Test', description: 'Test Description' };
+      const ph = new Ph(
+        INPUT_DIRECTORY_PATH,
+        OUTPUT_FILE_PATH,
+        iterable,
+      ).setConfig(newConfig);
 
-      ph.setConfig(newConfig);
       expect(ph.config).toEqual(newConfig);
     });
 
     it('should update config with callback function', () => {
-      const instance = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable);
       const configCallback = (prevConfig: Config) => ({
         ...prevConfig,
         typeName: 'Updated',
       });
+      const ph = new Ph(
+        INPUT_DIRECTORY_PATH,
+        OUTPUT_FILE_PATH,
+        iterable,
+      ).setConfig(configCallback);
 
-      instance.setConfig(configCallback);
-      expect(instance.config.typeName).toBe('Updated');
+      expect(ph.config.typeName).toBe('Updated');
     });
   });
 
@@ -95,8 +101,8 @@ describe('Ph', () => {
 
   describe('write', () => {
     it('should write file with default formatting', async () => {
-      const instance = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable);
-      await instance.write();
+      const ph = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable);
+      await ph.write();
 
       const expectedContent = `export type PathType = ${iterable.map((path) => `'${path}'`).join(' | ')}`;
 
@@ -107,14 +113,37 @@ describe('Ph', () => {
     });
 
     it('should write file with custom formatter', async () => {
-      const instance = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable);
+      const ph = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable);
       const formatter = (code: string) => code.toLowerCase();
-      await instance.write(formatter);
+      await ph.write(formatter);
 
       const expectedContent = `export type PathType = ${iterable
         .map((path) => `'${path}'`)
         .join(' | ')
         .toLowerCase()}`;
+
+      expect(fs.promises.writeFile).toHaveBeenCalledWith(
+        OUTPUT_FILE_PATH,
+        expectedContent,
+      );
+    });
+
+    it('should write file with config', async () => {
+      const config = {
+        typeName: 'Foo',
+        description: '@summary hello world!',
+      };
+      const instance = new Ph(
+        INPUT_DIRECTORY_PATH,
+        OUTPUT_FILE_PATH,
+        iterable,
+      ).setConfig(config);
+
+      await instance.write();
+
+      const expectedContent = `${formatJSDoc(config.description)}export type ${config.typeName} = ${iterable
+        .map((path) => `'${path}'`)
+        .join(' | ')}`;
 
       expect(fs.promises.writeFile).toHaveBeenCalledWith(
         OUTPUT_FILE_PATH,
