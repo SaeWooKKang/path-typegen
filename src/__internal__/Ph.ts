@@ -56,14 +56,14 @@ export class Ph implements PathGen {
     return this._config;
   }
 
-  public setConfig(config: Config | ((prevConfig: Config) => Config)) {
+  public setConfig(config: Config | ((prevConfig: Config) => Config)): Ph {
     if (typeof config === 'function') {
       this._config = config(this._config);
-
-      return;
+    } else {
+      this._config = config;
     }
 
-    this._config = config;
+    return this;
   }
 
   async write(formatter?: (code: string) => string): Promise<void> {
