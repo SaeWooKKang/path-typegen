@@ -19,6 +19,7 @@ export interface PathGen<A> {
   map<B>(callbackFn: (path: A) => B): PathGen<B>;
   filter(callbackFn: (path: A) => boolean): PathGen<A>;
   write(formatter?: (code: string) => string): Promise<void>;
+  writeSync(formatter?: (code: string) => string): Ph<A>;
 }
 
 export class Ph<A> implements PathGen<A> {
@@ -32,15 +33,15 @@ export class Ph<A> implements PathGen<A> {
     },
   ) {}
 
-  setInputPath(path: string): Ph<string> {
+  public setInputPath(path: string): Ph<string> {
     return new Ph(path, this.outputPath, getAllFiles(path), this.config);
   }
 
-  setOutputPath(path: string): Ph<A> {
+  public setOutputPath(path: string): Ph<A> {
     return new Ph(this.inputPath, path, this.paths, this.config);
   }
 
-  map<B>(callbackFn: (path: A) => B): Ph<B> {
+  public map<B>(callbackFn: (path: A) => B): Ph<B> {
     return new Ph(
       this.inputPath,
       this.outputPath,
@@ -49,7 +50,7 @@ export class Ph<A> implements PathGen<A> {
     );
   }
 
-  filter(callbackFn: (path: A) => boolean): Ph<A> {
+  public filter(callbackFn: (path: A) => boolean): Ph<A> {
     return new Ph(
       this.inputPath,
       this.outputPath,
@@ -87,9 +88,17 @@ export class Ph<A> implements PathGen<A> {
     return code;
   }
 
-  async write(formatter?: (code: string) => string): Promise<void> {
+  public async write(formatter?: (code: string) => string): Promise<void> {
     const code = this.createUnionType();
 
     await fs.promises.writeFile(this.outputPath, formatter?.(code) ?? code);
+  }
+
+  public writeSync(formatter?: (code: string) => string): Ph<A> {
+    const code = this.createUnionType();
+
+    fs.writeFileSync(this.outputPath, formatter?.(code) ?? code);
+
+    return new Ph(this.inputPath, this.outputPath, this.paths, this.config);
   }
 }

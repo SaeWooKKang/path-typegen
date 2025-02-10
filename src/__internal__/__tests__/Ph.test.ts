@@ -6,6 +6,7 @@ import { typed } from '../typed';
 
 vi.mock('node:fs', () => ({
   default: {
+    writeFileSync: vi.fn(),
     promises: {
       writeFile: vi.fn(),
     },
@@ -181,6 +182,46 @@ describe('Ph', () => {
         OUTPUT_FILE_PATH,
         expectedContent,
       );
+    });
+  });
+
+  describe('writeSync', () => {
+    it('should write file with default formatting', () => {
+      const ph = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable);
+      ph.writeSync();
+
+      const expectedContent = `export type PathType = ${iterable.map((path) => `'${path}'`).join(' | ')}`;
+
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        OUTPUT_FILE_PATH,
+        expectedContent,
+      );
+    });
+
+    it('should write file with custom formatter', () => {
+      const formatter = (code: string) => code.toLowerCase();
+
+      new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable).write(formatter);
+
+      const expectedContent = `export type PathType = ${iterable
+        .map((path) => `'${path}'`)
+        .join(' | ')
+        .toLowerCase()}`;
+
+      expect(fs.writeFileSync).toHaveBeenCalledWith(
+        OUTPUT_FILE_PATH,
+        expectedContent,
+      );
+    });
+
+    it('should return Ph class after writeSync', () => {
+      const ph = new Ph(
+        INPUT_DIRECTORY_PATH,
+        OUTPUT_FILE_PATH,
+        iterable,
+      ).writeSync();
+
+      expect(ph instanceof Ph).toBeTruthy();
     });
   });
 });
