@@ -101,6 +101,33 @@ describe('Ph', () => {
     });
   });
 
+  describe('Lazy Evaluation', () => {
+    it('should evaluate operations lazily when chaining filter and map', () => {
+      const operations: string[] = [];
+
+      const ph = new Ph('input', 'output.ts', ['path1', 'path2', 'path3'])
+        .filter((path) => {
+          operations.push(`filter: ${path}`);
+          return path.includes('2');
+        })
+        .map((path) => {
+          operations.push(`map: ${path}`);
+          return path.toUpperCase();
+        });
+
+      expect(operations).toHaveLength(0);
+
+      ph.createUnionType();
+
+      expect(operations).toEqual([
+        'filter: path1',
+        'filter: path2',
+        'map: path2',
+        'filter: path3',
+      ]);
+    });
+  });
+
   describe('createUnionType', () => {
     it('should generate valid type definition without map transformation', () => {
       const code = new Ph(
