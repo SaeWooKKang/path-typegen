@@ -117,7 +117,7 @@ describe('Ph', () => {
 
       expect(operations).toHaveLength(0);
 
-      ph.createUnionType();
+      ph._createUnionType();
 
       expect(operations).toEqual([
         'filter: path1',
@@ -134,7 +134,7 @@ describe('Ph', () => {
         INPUT_DIRECTORY_PATH,
         OUTPUT_FILE_PATH,
         iterable,
-      ).createUnionType();
+      )._createUnionType();
 
       const expectedContent = `export type PathType = ${iterable
         .map((path) => `'${path}'`)
@@ -146,7 +146,7 @@ describe('Ph', () => {
     it('should handle path mapping without typed function', () => {
       const code = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable)
         .map((path) => path)
-        .createUnionType();
+        ._createUnionType();
 
       const expectedContent = `export type PathType = ${iterable
         .map((path) => `'${path}'`)
@@ -158,7 +158,7 @@ describe('Ph', () => {
     it('should handle path mapping with typed function', () => {
       const code = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable)
         .map((path) => typed`${path}`)
-        .createUnionType();
+        ._createUnionType();
 
       const expectedContent = `export type PathType = ${iterable
         .map((path) => `'${path}'`)
@@ -171,7 +171,7 @@ describe('Ph', () => {
       const code = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable)
         .map((path) => path.toLocaleLowerCase())
         .map((path) => `${path}`)
-        .createUnionType();
+        ._createUnionType();
 
       const expectedContent = `export type PathType = ${iterable
         .map((path) => path.toLocaleLowerCase())

@@ -72,7 +72,7 @@ export class Ph<A> implements PathGen<A> {
     return new Ph(this.inputPath, this.outputPath, this.paths, config);
   }
 
-  public createUnionType() {
+  public _createUnionType() {
     const PREFIX = `${this.config.annotation}export type ${this.config.typeName} = `;
 
     const reduced = join(
@@ -89,13 +89,13 @@ export class Ph<A> implements PathGen<A> {
   }
 
   public async write(formatter?: (code: string) => string): Promise<void> {
-    const code = this.createUnionType();
+    const code = this._createUnionType();
 
     await fs.promises.writeFile(this.outputPath, formatter?.(code) ?? code);
   }
 
   public writeSync(formatter?: (code: string) => string): Ph<A> {
-    const code = this.createUnionType();
+    const code = this._createUnionType();
 
     fs.writeFileSync(this.outputPath, formatter?.(code) ?? code);
 
