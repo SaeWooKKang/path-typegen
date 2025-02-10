@@ -9,16 +9,86 @@ export interface Config {
 }
 
 export interface PathGen<A> {
+  /**
+   * Directory path to generate types from
+   * @example
+   * ```md
+   * './public/assets'
+   */
   inputPath: string;
+
+  /**
+   * File path where generated type definition will be written
+   * @example
+   * ```md
+   * './types/pathsType.ts'
+   * ```
+   */
   outputPath: string;
+
+  /**
+   * Configuration for type generation
+   */
   config: Config;
+
+  /**
+   * Iterable of paths generated from inputPath
+   */
   paths: Iterable<A>;
+
+  /**
+   * Sets a new input directory path and change paths to new input dir iterable
+   */
   setInputPath(path: string): PathGen<string>;
+
+  /**
+   * Sets a new output file path
+   */
   setOutputPath(path: string): PathGen<A>;
+
+  /**
+   * Updates the configuration for type generation
+   */
   setConfig(config: Config | ((prevConfig: Config) => Config)): void;
+
+  /**
+   * Transforms each path using the provided callback function
+   * @note Lazily evaluated until `write()` is called
+   * @note Use `typed` tagged template function for object type transformation
+   * @example
+   * ```typescript
+   * const paths = ph('./input', './output.ts')
+   *  .map(path => path.toUpperCase()) // literal type, not consumed
+   *  .map(path => typed`{
+   *     path: ${path}
+   *   }`) // Object type, still not consumed
+   *
+   * paths.write() // consumed
+   * ```
+   */
   map<B>(callbackFn: (path: A) => B): PathGen<B>;
+
+  /**
+   * Filters paths based on the provided callback function
+   * @note Lazily evaluated until `write()` is called
+   * @example
+   * ```typescript
+   * const paths = ph('./input', './output.ts') // not consumed
+   *  .filter(path => path.endsWith('.ts'))
+   *
+   * paths.write() // consumed
+   * ```
+   */
   filter(callbackFn: (path: A) => boolean): PathGen<A>;
+
+  /**
+   * `Asynchronously` writes the generated type definition to the output file
+   */
   write(formatter?: (code: string) => string): Promise<void>;
+
+  /**
+   * `Synchronously` writes the generated type definition to the output file
+   */
   writeSync(formatter?: (code: string) => string): Ph<A>;
 }
 
