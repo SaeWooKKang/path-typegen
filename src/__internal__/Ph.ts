@@ -27,7 +27,7 @@ export class Ph<A> implements PathGen<A> {
     public paths: Iterable<A>,
     public config: Config = {
       description: '',
-      typeName: '',
+      typeName: 'PathType',
     },
   ) {}
 
@@ -40,7 +40,7 @@ export class Ph<A> implements PathGen<A> {
   }
 
   map<B>(callbackFn: (path: A) => B): Ph<B> {
-    return new Ph<B>(
+    return new Ph(
       this.inputPath,
       this.outputPath,
       map(callbackFn, this.paths),
@@ -66,6 +66,7 @@ export class Ph<A> implements PathGen<A> {
         config(this.config),
       );
     }
+
     return new Ph(this.inputPath, this.outputPath, this.paths, config);
     }
 
