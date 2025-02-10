@@ -1,10 +1,11 @@
+import fs from 'node:fs';
 import { getAllFiles } from './getAllFiles';
 import { filter, join, map } from './iterableHelpers';
-import fs from 'node:fs';
+import { isTyped, typed } from './typed';
 
 export interface Config {
   typeName: string;
-  description: string;
+  annotation: string;
 }
 
 export interface PathGen<A> {
@@ -26,7 +27,7 @@ export class Ph<A> implements PathGen<A> {
     public outputPath: string,
     public paths: Iterable<A>,
     public config: Config = {
-      description: '',
+      annotation: '',
       typeName: 'PathType',
     },
   ) {}
@@ -68,20 +69,26 @@ export class Ph<A> implements PathGen<A> {
     }
 
     return new Ph(this.inputPath, this.outputPath, this.paths, config);
-    }
-
-    return this;
   }
 
-  async write(formatter?: (code: string) => string): Promise<void> {
-    const DEFAULT_TYPE_NAME = 'PathType';
-    const PREFIX = `export type ${this._config.typeName || DEFAULT_TYPE_NAME} = `;
+  public createUnionType() {
+    const PREFIX = `${this.config.annotation}export type ${this.config.typeName} = `;
 
     const reduced = join(
       ' | ',
-      map((path) => `'${path}'`, this.paths),
+      map(
+        (path) => (isTyped(path) ? path.toCode() : typed`${path}`.toCode()),
+        this.paths,
+      ),
     );
+
     const code = PREFIX + reduced;
+
+    return code;
+  }
+
+  async write(formatter?: (code: string) => string): Promise<void> {
+    const code = this.createUnionType();
 
     await fs.promises.writeFile(this.outputPath, formatter?.(code) ?? code);
   }

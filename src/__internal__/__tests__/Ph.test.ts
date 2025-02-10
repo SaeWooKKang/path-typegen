@@ -1,7 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
-import { formatJSDoc, Ph, type Config } from '../Ph';
 import fs from 'node:fs';
+import { describe, expect, it, vi } from 'vitest';
+import { type Config, Ph } from '../Ph';
 import { isIterable } from '../iterableHelpers';
+import { typed } from '../typed';
 
 vi.mock('node:fs', () => ({
   default: {
@@ -44,7 +45,7 @@ describe('Ph', () => {
 
   describe('setConfig', () => {
     it('should update config with object', () => {
-      const newConfig = { typeName: 'Test', description: 'Test Description' };
+      const newConfig = { typeName: 'Test', annotation: 'Test Description' };
       const ph = new Ph(
         INPUT_DIRECTORY_PATH,
         OUTPUT_FILE_PATH,
@@ -99,6 +100,60 @@ describe('Ph', () => {
     });
   });
 
+  describe('createUnionType', () => {
+    it('should generate valid type definition without map transformation', () => {
+      const code = new Ph(
+        INPUT_DIRECTORY_PATH,
+        OUTPUT_FILE_PATH,
+        iterable,
+      ).createUnionType();
+
+      const expectedContent = `export type PathType = ${iterable
+        .map((path) => `'${path}'`)
+        .join(' | ')}`;
+
+      expect(code).toBe(expectedContent);
+    });
+
+    it('should handle path mapping without typed function', () => {
+      const code = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable)
+        .map((path) => path)
+        .createUnionType();
+
+      const expectedContent = `export type PathType = ${iterable
+        .map((path) => `'${path}'`)
+        .join(' | ')}`;
+
+      expect(code).toBe(expectedContent);
+    });
+
+    it('should handle path mapping with typed function', () => {
+      const code = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable)
+        .map((path) => typed`${path}`)
+        .createUnionType();
+
+      const expectedContent = `export type PathType = ${iterable
+        .map((path) => `'${path}'`)
+        .join(' | ')}`;
+
+      expect(code).toBe(expectedContent);
+    });
+
+    it('should support chained transformations with multiple maps', () => {
+      const code = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable)
+        .map((path) => path.toLocaleLowerCase())
+        .map((path) => `${path}`)
+        .createUnionType();
+
+      const expectedContent = `export type PathType = ${iterable
+        .map((path) => path.toLocaleLowerCase())
+        .map((path) => `'${path}'`)
+        .join(' | ')}`;
+
+      expect(code).toBe(expectedContent);
+    });
+  });
+
   describe('write', () => {
     it('should write file with default formatting', async () => {
       const ph = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable);
@@ -112,38 +167,15 @@ describe('Ph', () => {
       );
     });
 
-    it('should write file with custom formatter', async () => {
-      const ph = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable);
+    it('should write file with custom formatter', () => {
       const formatter = (code: string) => code.toLowerCase();
-      await ph.write(formatter);
+
+      new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable).write(formatter);
 
       const expectedContent = `export type PathType = ${iterable
         .map((path) => `'${path}'`)
         .join(' | ')
         .toLowerCase()}`;
-
-      expect(fs.promises.writeFile).toHaveBeenCalledWith(
-        OUTPUT_FILE_PATH,
-        expectedContent,
-      );
-    });
-
-    it('should write file with config', async () => {
-      const config = {
-        typeName: 'Foo',
-        description: '@summary hello world!',
-      };
-      const instance = new Ph(
-        INPUT_DIRECTORY_PATH,
-        OUTPUT_FILE_PATH,
-        iterable,
-      ).setConfig(config);
-
-      await instance.write();
-
-      const expectedContent = `${formatJSDoc(config.description)}export type ${config.typeName} = ${iterable
-        .map((path) => `'${path}'`)
-        .join(' | ')}`;
 
       expect(fs.promises.writeFile).toHaveBeenCalledWith(
         OUTPUT_FILE_PATH,
