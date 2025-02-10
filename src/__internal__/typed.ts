@@ -22,39 +22,30 @@ class Typed {
   ) {}
 
   toCode() {
-    const result: string[] = [];
+    const newValues = [...this.values, null];
+    const ziped = newValues.map((value, i) => [this.strs[i], value]);
 
-    for (let i = 0; i < this.values.length; i++) {
-      const str = this.strs[i]!;
-      const value = this.values[i];
+    return ziped
+      .flatMap(([str, value]) => {
+        // Handle TypeScript primitive types
+        if (typeof value === 'string' && TS_TYPES.has(value)) {
+          return [str, value];
+        }
 
-      result.push(str);
+        // Handle object types
+        if (typeof value === 'string' && value.includes('{')) {
+          return [str, value];
+        }
 
-      // Handle TypeScript primitive types
-      if (typeof value === 'string' && TS_TYPES.has(value)) {
-        result.push(value);
-        continue;
-      }
+        // Handle string literal types
+        if (typeof value === 'string') {
+          return [str, `'${value}'`];
+        }
 
-      // Handle object types
-      if (typeof value === 'string' && value.includes('{')) {
-        result.push(value);
-        continue;
-      }
-
-      // Handle string literal types
-      if (typeof value === 'string') {
-        result.push(`'${value}'`);
-        continue;
-      }
-
-      result.push(`${value}`);
-    }
-
-    // Add the final string part
-    result.push(this.strs[this.strs.length - 1]!);
-
-    return result.join('');
+        return [str, `${value}`];
+      })
+      .slice(0, -1)
+      .join('');
   }
 }
 

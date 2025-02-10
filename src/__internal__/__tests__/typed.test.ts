@@ -32,4 +32,13 @@ describe('typed', () => {
       expect(typed`${type}`.toCode()).toBe(type);
     }
   });
+
+  it('should preserve whitespace and newlines', () => {
+    const res = typed`
+      ${'value'}
+    `.toCode();
+    expect(res).toBe(`
+      'value'
+    `);
+  });
 });
