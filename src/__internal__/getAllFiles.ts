@@ -1,12 +1,19 @@
 import fs from 'node:fs';
 
-export const getAllFiles = (path: string): string[] =>
-  fs
-    .readdirSync(path, { withFileTypes: true })
-    .map((dirent) => ({
-      isDirectory: dirent.isDirectory(),
-      fullPath: path.concat('/', dirent.name),
-    }))
-    .flatMap(({ fullPath, isDirectory }) =>
-      isDirectory ? getAllFiles(fullPath) : [fullPath],
-    );
+export function* getAllFiles(inputPath: string): Generator<string> {
+  const dir = fs.opendirSync(inputPath);
+  let dirent: fs.Dirent | null;
+
+  // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+  while ((dirent = dir.readSync())) {
+    const fullPath = inputPath.concat('/', dirent.name);
+
+    if (dirent.isDirectory()) {
+      yield* getAllFiles(fullPath);
+    } else {
+      yield fullPath;
+    }
+  }
+
+  dir.closeSync();
+}
