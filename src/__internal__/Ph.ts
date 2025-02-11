@@ -12,7 +12,7 @@ export interface PathGen<A> {
   /**
    * Directory path to generate types from
    * @example
-   * ```md
+   * ```typescript
    * './public/assets'
    */
   inputPath: string;
@@ -20,7 +20,7 @@ export interface PathGen<A> {
   /**
    * File path where generated type definition will be written
    * @example
-   * ```md
+   * ```typescript
    * './types/pathsType.ts'
    * ```
    */
@@ -32,7 +32,7 @@ export interface PathGen<A> {
   config: Config;
 
   /**
-   * Iterable of paths generated from inputPath
+   * Iterable of paths generated from `inputPath`
    */
   paths: Iterable<A>;
 
@@ -53,41 +53,48 @@ export interface PathGen<A> {
 
   /**
    * Transforms each path using the provided callback function
-   * @note Lazily evaluated until `write()` is called
+   * @note **Lazily evaluated** until `write()` is called
    * @note Use `typed` tagged template function for object type transformation
    * @example
    * ```typescript
    * const paths = ph('./input', './output.ts')
-   *  .map(path => path.toUpperCase()) // literal type, not consumed
+   *  .map(path => path.toUpperCase()) // literal type, iterable is not consumed
    *  .map(path => typed`{
    *     path: ${path}
-   *   }`) // Object type, still not consumed
+   *   }`) // object type, iterable is still not consumed
    *
-   * paths.write() // consumed
+   * paths.write() // iterable is consumed
    * ```
    */
   map<B>(callbackFn: (path: A) => B): PathGen<B>;
 
   /**
    * Filters paths based on the provided callback function
-   * @note Lazily evaluated until `write()` is called
+   * @note **Lazily evaluated** until `write()` is called
    * @example
    * ```typescript
-   * const paths = ph('./input', './output.ts') // not consumed
+   * const paths = ph('./input', './output.ts') // iterable is not consumed
    *  .filter(path => path.endsWith('.ts'))
    *
-   * paths.write() // consumed
+   * paths.write() // iterable is consumed
    * ```
    */
   filter(callbackFn: (path: A) => boolean): PathGen<A>;
 
   /**
    * `Asynchronously` writes the generated type definition to the output file
+   *
+   * Calling this method consumes the iterable.
+   * @param formatter Function to format the generated code before writing (e.g. Prettier)
    */
   write(formatter?: (code: string) => string): Promise<void>;
 
   /**
    * `Synchronously` writes the generated type definition to the output file
+   *
+   * Calling this method consumes the iterable.
+   * @param formatter Function to format the generated code before writing (e.g. Prettier)
+   *
    */
   writeSync(formatter?: (code: string) => string): Ph<A>;
 }

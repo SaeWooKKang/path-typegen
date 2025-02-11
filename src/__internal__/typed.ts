@@ -49,13 +49,23 @@ class Typed {
   }
 }
 
+/**
+ * A tagged template function that converts template literals into TypeScript type expressions.
+ *
+ * @example
+ * // Primitive TypeScript types are preserved as-is
+ * typed`${'string'}` -> string
+ *
+ * // Regular strings are wrapped in quotes as literal types
+ * typed`${'./src/foo.ts'}` -> './src/foo.ts'
+ *
+ * // Object types are preserved in their original form
+ * typed`{ path: string }` -> { path: string }
+ */
 export const typed = (
   strs: TemplateStringsArray,
   ...values: unknown[]
-): Typed => {
-  return new Typed(strs, values);
-};
+): Typed => new Typed(strs, values);
 
-export const isTyped = (value: unknown): value is Typed => {
-  return value instanceof Typed;
-};
+export const isTyped = (value: unknown): value is Typed =>
+  value instanceof Typed;
