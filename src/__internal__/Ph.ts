@@ -49,7 +49,7 @@ export interface PathGen<A> {
   /**
    * Updates the configuration for type generation
    */
-  setConfig(config: Config | ((prevConfig: Config) => Config)): void;
+  setConfig(config: Config | ((prevConfig: Config) => Config)): PathGen<A>;
 
   /**
    * Transforms each path using the provided callback function
