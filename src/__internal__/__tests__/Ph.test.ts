@@ -128,7 +128,7 @@ describe('Ph', () => {
     });
   });
 
-  describe('createUnionType', () => {
+  describe('_createUnionType', () => {
     it('should generate valid type definition without map transformation', () => {
       const code = new Ph(
         INPUT_DIRECTORY_PATH,
@@ -174,6 +174,20 @@ describe('Ph', () => {
         ._createUnionType();
 
       const expectedContent = `export type PathType = ${iterable
+        .map((path) => path.toLocaleLowerCase())
+        .map((path) => `'${path}'`)
+        .join(' | ')}`;
+
+      expect(code).toBe(expectedContent);
+    });
+
+    it('should handle config', () => {
+      const code = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable)
+        .setConfig({ annotation: '// hello world', typeName: 'Bar' })
+        ._createUnionType();
+
+      const expectedContent = `// hello world
+export type Bar = ${iterable
         .map((path) => path.toLocaleLowerCase())
         .map((path) => `'${path}'`)
         .join(' | ')}`;

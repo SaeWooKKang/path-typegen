@@ -5,7 +5,7 @@ import { isTyped, typed } from './typed';
 
 export interface Config {
   typeName: string;
-  annotation: string;
+  annotation: string | null;
 }
 
 export interface PathGen<A> {
@@ -105,7 +105,7 @@ export class Ph<A> implements PathGen<A> {
     public outputPath: string,
     public paths: Iterable<A>,
     public config: Config = {
-      annotation: '',
+      annotation: null,
       typeName: 'PathType',
     },
   ) {}
@@ -150,7 +150,7 @@ export class Ph<A> implements PathGen<A> {
   }
 
   public _createUnionType() {
-    const PREFIX = `${this.config.annotation}export type ${this.config.typeName} = `;
+    const PREFIX = `${this.config.annotation ? `${this.config.annotation}\n` : ''}export type ${this.config.typeName} = `;
 
     const reduced = join(
       ' | ',
