@@ -6,25 +6,18 @@
 
 `path-typegen` is a library that converts file paths to TypeScript types
 
-## ToC
-- [Installation](#installation)
-- [Usage](#usage)
-  - [ph](#ph)
-  - [writeTS](#writets)
-  - [CLI](#cli)
-
-## Installation
+## 📦 Installation
 
 ``` bash
 npm i path-typegen
 ```
 
-## Usage
+## 🚀 Usage
 
-### ph
+### 🔰 ph
 Provides flexible path type processing using method chaining with `map` and `filter`. 
 
-##### Basic
+#### Basic
 ``` ts
 // 📦 src/components/
 //  ┣ 📂Button
@@ -39,7 +32,7 @@ ph('./src/components', './src/types/components.ts')
 export type PathType = './src/components/Button/index.tsx' | './src/components/Card/index.tsx'
 ```
 
-##### Processing
+#### Processing
 Uses method chaining with `map()` and `filter()` for path transformations. 
 - All operations are **lazily evaluated** until `write()` is called.
 - Use `typed` tagged template function for object type transformation
@@ -75,7 +68,7 @@ export type PathType =
     }
 ```
 
-##### Configuration
+#### Configuration
 ``` ts
 ph('./src/components', './src/types/components.ts')
   .setConfig({
@@ -89,54 +82,7 @@ ph('./src/components', './src/types/components.ts')
 export type ComponentPaths = './src/components/Button/index.tsx' | './src/components/Card/index.tsx'
 ```
 
-### writeTS
-- Generates path structure to Typescript
-
-##### Basic
-``` ts
-// 📦 src/assets/
-//  ┣ 📂bar
-//  ┃ ┗ 📜a.png
-//  ┣ 📂foo
-//  ┃ ┗ 📜b.jpeg
-
-writeTS('./src/assets', './src/imageType.ts');
-
-// ./src/imageType.ts
-export type ImageType = './src/assets/bar/a.png' | './src/assets/foo/b.jpeg'
-```
-
-##### With options
-
-``` ts
-// 📦 src/pages/posts/
-//  ┣ 📂[id]
-//  ┃ ┗ 📜index.tsx
-
-writeTS('./src/pages/posts', './src/pathType.ts', {
-  description: 'Wrap your navigation Component',
-  typeName: 'PathType',
-  replacer: (path: string) => path.split('/').slice(1, -1).join('/'),
-  output: {
-    type: 'object',
-    pattern: /(?<=\[)[^\]]*(?=\])/g; // [<PICK>]
-  },
-});
-
-// ./src/pathType.ts
-
-/** 
- * Wrap your navigation Component
- */
-export type PathType = {
-  path: "src/pages/posts/[id]";
-  params: {
-    id: string;
-  };
-};
-```
-
-### CLI
+### 💻 CLI
 
 #### Options
 - -h, --help — Prints help information
