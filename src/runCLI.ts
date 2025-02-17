@@ -5,7 +5,7 @@ import { Command } from 'commander';
 import { version } from '../package.json';
 import { CONFIG_FILENAME, generateConfig } from './__internal__/generateConfig';
 
-import { writeTS, type Options } from './__internal__/writeTS';
+import { type Options, writeTS } from './__internal__/writeTS';
 
 export type CLIOptions = {
   inputPath: string;
