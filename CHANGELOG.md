@@ -1,5 +1,11 @@
 # path-typegen
 
+## 2.0.0
+
+### Major Changes
+
+- a34f405: Next steps for path-typegen (February 2025)
+
 ## 1.2.0
 
 ### Minor Changes
