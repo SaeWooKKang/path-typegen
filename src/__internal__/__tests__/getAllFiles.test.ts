@@ -15,4 +15,17 @@ describe('getAllFiles', () => {
 
     expect(res.length).toBe(3);
   });
+
+  it('should handle path with trailing slash', () => {
+    const PATH_WITHOUT_SLASH = './src/__internal__/__tests__/__assets__/bar';
+    const PATH_WITH_SLASH = `${PATH_WITHOUT_SLASH}/`;
+
+    const withSlash = getAllFiles(PATH_WITH_SLASH).next().value;
+    const withWithoutSlash = getAllFiles(PATH_WITHOUT_SLASH).next().value;
+
+    const res = `${PATH_WITHOUT_SLASH}/index.ts`;
+
+    expect(withSlash).toBe(res);
+    expect(withWithoutSlash).toBe(res);
+  });
 });

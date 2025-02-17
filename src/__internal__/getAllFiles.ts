@@ -6,7 +6,9 @@ export function* getAllFiles(inputPath: string): Generator<string> {
 
   // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
   while ((dirent = dir.readSync())) {
-    const fullPath = inputPath.concat('/', dirent.name);
+    const fullPath = inputPath.endsWith('/')
+      ? inputPath.concat(dirent.name)
+      : inputPath.concat('/', dirent.name);
 
     if (dirent.isDirectory()) {
       yield* getAllFiles(fullPath);
