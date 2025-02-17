@@ -8,9 +8,9 @@ import {
   CONFIG_FILENAME,
   generateConfig,
 } from '../__internal__/generateConfig';
-import { writeTS } from '../index';
+import { writeTS } from '../__internal__/writeTS';
 
-vi.mock('../index', () => ({
+vi.mock('../__internal__/writeTS', () => ({
   writeTS: vi.fn().mockResolvedValue(undefined),
 }));
 
