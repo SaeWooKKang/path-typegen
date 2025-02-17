@@ -4,8 +4,8 @@ import chalk from 'chalk';
 import { Command } from 'commander';
 import { version } from '../package.json';
 import { CONFIG_FILENAME, generateConfig } from './__internal__/generateConfig';
-import type { Options } from './__internal__/pathToSchema';
-import { writeTS } from './__internal__/writeTS';
+
+import { writeTS, type Options } from './__internal__/writeTS';
 
 export type CLIOptions = {
   inputPath: string;
