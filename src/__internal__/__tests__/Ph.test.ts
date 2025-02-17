@@ -138,7 +138,7 @@ describe('Ph', () => {
 
       const expectedContent = `export type PathType = ${iterable
         .map((path) => `'${path}'`)
-        .join(' | ')}`;
+        .join(' | ')}`.concat('\n');
 
       expect(code).toBe(expectedContent);
     });
@@ -150,7 +150,7 @@ describe('Ph', () => {
 
       const expectedContent = `export type PathType = ${iterable
         .map((path) => `'${path}'`)
-        .join(' | ')}`;
+        .join(' | ')}`.concat('\n');
 
       expect(code).toBe(expectedContent);
     });
@@ -162,7 +162,7 @@ describe('Ph', () => {
 
       const expectedContent = `export type PathType = ${iterable
         .map((path) => `'${path}'`)
-        .join(' | ')}`;
+        .join(' | ')}`.concat('\n');
 
       expect(code).toBe(expectedContent);
     });
@@ -176,7 +176,7 @@ describe('Ph', () => {
       const expectedContent = `export type PathType = ${iterable
         .map((path) => path.toLocaleLowerCase())
         .map((path) => `'${path}'`)
-        .join(' | ')}`;
+        .join(' | ')}`.concat('\n');
 
       expect(code).toBe(expectedContent);
     });
@@ -190,7 +190,7 @@ describe('Ph', () => {
 export type Bar = ${iterable
         .map((path) => path.toLocaleLowerCase())
         .map((path) => `'${path}'`)
-        .join(' | ')}`;
+        .join(' | ')}`.concat('\n');
 
       expect(code).toBe(expectedContent);
     });
@@ -201,7 +201,10 @@ export type Bar = ${iterable
       const ph = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable);
       await ph.write();
 
-      const expectedContent = `export type PathType = ${iterable.map((path) => `'${path}'`).join(' | ')}`;
+      const expectedContent =
+        `export type PathType = ${iterable.map((path) => `'${path}'`).join(' | ')}`.concat(
+          '\n',
+        );
 
       expect(fs.promises.writeFile).toHaveBeenCalledWith(
         OUTPUT_FILE_PATH,
@@ -217,7 +220,7 @@ export type Bar = ${iterable
       const expectedContent = `export type PathType = ${iterable
         .map((path) => `'${path}'`)
         .join(' | ')
-        .toLowerCase()}`;
+        .toLowerCase()}`.concat('\n');
 
       expect(fs.promises.writeFile).toHaveBeenCalledWith(
         OUTPUT_FILE_PATH,
@@ -231,7 +234,10 @@ export type Bar = ${iterable
       const ph = new Ph(INPUT_DIRECTORY_PATH, OUTPUT_FILE_PATH, iterable);
       ph.writeSync();
 
-      const expectedContent = `export type PathType = ${iterable.map((path) => `'${path}'`).join(' | ')}`;
+      const expectedContent =
+        `export type PathType = ${iterable.map((path) => `'${path}'`).join(' | ')}`.concat(
+          '\n',
+        );
 
       expect(fs.writeFileSync).toHaveBeenCalledWith(
         OUTPUT_FILE_PATH,
@@ -247,7 +253,7 @@ export type Bar = ${iterable
       const expectedContent = `export type PathType = ${iterable
         .map((path) => `'${path}'`)
         .join(' | ')
-        .toLowerCase()}`;
+        .toLowerCase()}`.concat('\n');
 
       expect(fs.writeFileSync).toHaveBeenCalledWith(
         OUTPUT_FILE_PATH,
