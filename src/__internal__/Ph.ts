@@ -151,6 +151,7 @@ export class Ph<A> implements PathGen<A> {
 
   public _createUnionType() {
     const PREFIX = `${this.config.annotation ? `${this.config.annotation}\n` : ''}export type ${this.config.typeName} = `;
+    const POSTFIX = '\n';
 
     const reduced = join(
       ' | ',
@@ -160,7 +161,7 @@ export class Ph<A> implements PathGen<A> {
       ),
     );
 
-    const code = PREFIX + reduced;
+    const code = `${PREFIX}${reduced}${POSTFIX}`;
 
     return code;
   }
