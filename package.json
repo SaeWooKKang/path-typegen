@@ -2,7 +2,7 @@
   "name": "path-typegen",
   "description": "Typegen for path - Powered by JSON Schema",
   "packageManager": "pnpm@9.2.0",
-  "version": "1.2.0",
+  "version": "2.0.0-alpha.3",
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsup",
@@ -14,7 +14,7 @@
     "lint": "tsc",
     "ci": "pnpm check && pnpm lint && pnpm test && pnpm build && pnpm check-exports",
     "prepublishOnly": "pnpm run ci",
-    "changeset:version":"changeset version",
+    "changeset:version": "changeset version",
     "changeset:publish": "pnpm changeset publish",
     "local-release": "pnpm changeset:version && pnpm changeset:publish",
     "release": "pnpm changeset:publish"
@@ -60,7 +60,6 @@
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "commander": "^12.1.0",
-    "json-schema-to-typescript": "^15.0.3"
+    "commander": "^12.1.0"
   }
 }
