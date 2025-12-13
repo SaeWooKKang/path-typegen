@@ -1,5 +1,11 @@
 # path-typegen
 
+## 2.0.1
+
+### Patch Changes
+
+- 25a865e: chore(deps): bump the npm_and_yarn group across 1 directory with 6 updates
+
 ## 2.0.0
 
 ### Major Changes
