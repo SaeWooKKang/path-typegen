@@ -1,5 +1,11 @@
 # path-typegen
 
+## 2.0.2
+
+### Patch Changes
+
+- b939ce7: fix: connect npm with oidc
+
 ## 2.0.1
 
 ### Patch Changes
