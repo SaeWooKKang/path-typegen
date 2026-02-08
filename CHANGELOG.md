@@ -1,5 +1,11 @@
 # path-typegen
 
+## 2.1.0
+
+### Minor Changes
+
+- b6764df: feat: Add forEach
+
 ## 2.0.2
 
 ### Patch Changes
