@@ -1,5 +1,5 @@
 ---
-"path-typegen": patch
+"path-typegen": minor
 ---
 
 feat: Add forEach
