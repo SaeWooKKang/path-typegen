@@ -85,6 +85,30 @@ describe('Ph', () => {
     });
   });
 
+  describe('forEach', () => {
+    it('runs side-effect callbacks lazily', () => {
+      const calls: string[] = [];
+
+      // biome-ignore lint/complexity/noForEach: <explanation>
+      const ph = new Ph(
+        INPUT_DIRECTORY_PATH,
+        OUTPUT_FILE_PATH,
+        iterable,
+      ).forEach((path) => {
+        calls.push(path);
+      });
+
+      expect(ph instanceof Ph).toBeTruthy();
+      expect(isIterable(ph.paths)).toBeTruthy();
+      expect(calls).toHaveLength(0);
+
+      const first = ph.paths[Symbol.iterator]().next();
+
+      expect(calls).toEqual([iterable[0]]);
+      expect(first.value).toBeUndefined();
+    });
+  });
+
   describe('filter', () => {
     it('excludes paths not matching predicate', () => {
       const cb = (path: string) => path.endsWith('.tsx');

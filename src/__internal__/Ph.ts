@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import { getAllFiles } from './getAllFiles';
-import { filter, join, map } from './iterableHelpers';
+import { filter, forEach, join, map } from './iterableHelpers';
 import { isTyped, typed } from './typed';
 
 export interface Config {
@@ -68,6 +68,8 @@ export interface PathGen<A> {
    */
   map<B>(callbackFn: (path: A) => B): PathGen<B>;
 
+  forEach<B>(callbackFn: (path: A) => B): PathGen<void>;
+
   /**
    * Filters paths based on the provided callback function
    * @note **Lazily evaluated** until `write()` is called
@@ -123,6 +125,15 @@ export class Ph<A> implements PathGen<A> {
       this.inputPath,
       this.outputPath,
       map(callbackFn, this.paths),
+      this.config,
+    );
+  }
+
+  public forEach<B>(callbackFn: (path: A) => B): PathGen<void> {
+    return new Ph(
+      this.inputPath,
+      this.outputPath,
+      forEach(callbackFn, this.paths),
       this.config,
     );
   }
