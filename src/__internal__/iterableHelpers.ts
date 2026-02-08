@@ -7,6 +7,16 @@ export function* map<A, B>(
   }
 }
 
+export function* forEach<A>(
+  f: (a: A) => void,
+  iterable: Iterable<A>,
+): IterableIterator<void> {
+  for (const a of iterable) {
+    f(a);
+    yield undefined;
+  }
+}
+
 export function* filter<A>(f: (a: A) => boolean, iterable: Iterable<A>) {
   for (const a of iterable) {
     if (f(a)) {
